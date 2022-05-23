@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Document</title>
+	</head>
+	<body>
+		<div id="container"></div>
+		<button id="scan">Start Taking Attendence</button>
+		<script>
+			let humans = [
+				{
+					name: "Naman Agrawal",
+					present: false,
+					serialNumber: "97:85:73:76",
+				},
+				{
+					name: "Sawayam",
+					serialNumber: "f7:30:c9:76",
+					present: false,
+				},
+				{
+					name: "Metro card",
+					serialNumber: "04:22:15:a2:f9:62:80",
+					present: false,
+				},
+				{
+					name: "Tanya",
+					serialNumber: "21:d4:b6:1c",
+					present: false,
+				},
+			];
+
+			let read = async () => {
+				const ndef = new NDEFReader();
+				await ndef.scan();
+
+				ndef.addEventListener("reading", (objective) => {
+					objective.present = true;
+				});
+			};
+
+			document.getElementById("scan").onclick = read;
+
+			setInterval(() => {
+				let output = "";
+				humans.forEach((human) => {
+					output += `<div><p style="color: ${
+						human.present ? "#00ff00" : "#ff0000"
+					}">${human.name}</p></div>`;
+				});
+				document.getElementById("container").innerHTML = output;
+			}, 0);
+		</script>
+	</body>
+</html>
